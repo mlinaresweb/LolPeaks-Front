@@ -1,9 +1,15 @@
 <template>
     <div>
-      <h1>Login Admin</h1>
+      <h1>Login</h1>
       <form @submit.prevent="login">
-        <input v-model="username" type="text" placeholder="Username" />
-        <input v-model="password" type="password" placeholder="Password" />
+        <div>
+          <label for="username">Username:</label>
+          <input type="text" v-model="username" id="username" required>
+        </div>
+        <div>
+          <label for="password">Password:</label>
+          <input type="password" v-model="password" id="password" required>
+        </div>
         <button type="submit">Login</button>
       </form>
     </div>
@@ -16,8 +22,8 @@
   
   const username = ref('');
   const password = ref('');
-  const adminAuthStore = useAdminAuthStore();
   const router = useRouter();
+  const adminAuthStore = useAdminAuthStore();
   
   const login = async () => {
     await adminAuthStore.login(username.value, password.value);
