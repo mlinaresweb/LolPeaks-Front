@@ -25,16 +25,17 @@ export const useCronStore = defineStore('cronStore', {
               this.loading = false;
             }
           },
-    async executeJobNow(name: string) {
-      const { axiosAdminInstance } = useAxios();
-      try {
-        await axiosAdminInstance.post('/cron/execute', { name });
-        this.fetchCrons(); 
-      } catch (err:any) {
-        this.error = err.response ? err.response.data : err.message;
-        console.error('Error executing job now:', this.error);
-      }
-    },
+          async executeJobNow(name: string, scriptPath: string, params: any) {
+            const { axiosAdminInstance } = useAxios();
+            try {
+              await axiosAdminInstance.post('/cron/execute', { name, scriptPath, ...params });
+              this.fetchCrons();
+            } catch (err:any) {
+              this.error = err.response ? err.response.data : err.message;
+              console.error('Error executing job now:', this.error);
+            }
+          },
+          
     async pauseJob(name: string) {
       const { axiosAdminInstance } = useAxios();
       try {
@@ -104,7 +105,8 @@ export const useCronStore = defineStore('cronStore', {
         ...cron,
         intervalValue,
         intervalType,
-        params: JSON.stringify(cron.params, null, 2)
+        region: cron.region || '',
+        tier: cron.tier || '',
       };
     }
     

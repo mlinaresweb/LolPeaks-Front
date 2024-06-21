@@ -23,8 +23,12 @@
           <input type="text" id="scriptPath" v-model="editingCron.scriptPath" required>
         </div>
         <div>
-          <label for="params">Params (JSON)</label>
-          <textarea id="params" v-model="editingCron.params"></textarea>
+          <label for="region">Region (optional)</label>
+          <input type="text" id="region" v-model="editingCron.region">
+        </div>
+        <div>
+          <label for="tier">Tier (optional)</label>
+          <input type="text" id="tier" v-model="editingCron.tier">
         </div>
         <div>
           <label for="firstRun">First Run (optional)</label>
@@ -54,7 +58,8 @@
       newIntervalType: editingCron.value.intervalType,
       newIntervalValue: editingCron.value.intervalValue,
       newScriptPath: editingCron.value.scriptPath,
-      newParams: JSON.parse(editingCron.value.params), // Convertir params de vuelta a objeto
+      newRegion: editingCron.value.region,
+      newTier: editingCron.value.tier,
       newFirstRun: editingCron.value.firstRun,
     });
   };

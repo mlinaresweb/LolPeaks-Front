@@ -1,4 +1,3 @@
-// composables/backOffice/useCrons.ts
 import { useCronStore } from '~/stores/backOffice/cronStore';
 import { computed } from 'vue';
 
@@ -9,8 +8,8 @@ export function useCrons() {
     await cronStore.fetchCrons();
   };
 
-  const executeJobNow = async (name: string) => {
-    await cronStore.executeJobNow(name);
+  const executeJobNow = async (name: string, scriptPath: string, params: any) => {
+    await cronStore.executeJobNow(name, scriptPath, params);
   };
 
   const pauseJob = async (name: string) => {

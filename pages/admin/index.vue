@@ -18,6 +18,8 @@
             <th>Name</th>
             <th>Interval</th>
             <th>Script</th>
+            <th>Region</th>
+            <th>Tier</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -26,8 +28,10 @@
             <td>{{ cron.name }}</td>
             <td>{{ cron.interval }}</td>
             <td>{{ cron.scriptPath }}</td>
+            <td>{{ cron.region || 'N/A' }}</td>
+            <td>{{ cron.tier || 'N/A' }}</td>
             <td>
-              <button @click="executeJobNow(cron.name)">Execute Now</button>
+              <button @click="handleExecuteJobNow(cron.name, cron.scriptPath, cron.region, cron.tier)">Execute Now</button>
               <button @click="pauseJob(cron.name)">Pause</button>
               <button @click="resumeJob(cron.name)">Resume</button>
               <button @click="removeJob(cron.name)">Remove</button>
@@ -65,7 +69,7 @@ import Modal from '~/components/backOffice/generics/Modal.vue';
 
 definePageMeta({
   layout: 'admin'
-})
+});
 
 const adminAuthStore = useAdminAuthStore();
 const router = useRouter();
@@ -83,6 +87,10 @@ const openEditCronModal = (cron) => {
   showEditCronModal.value = true;
 };
 
+const handleExecuteJobNow = (name, scriptPath, region, tier) => {
+  executeJobNow(name, scriptPath, { region, tier });
+};
+
 onMounted(() => {
   adminAuthStore.checkAuth();
   if (isAuthenticated.value) {
@@ -91,8 +99,6 @@ onMounted(() => {
     router.push('/admin/login');
   }
 });
-
-console.log('Crons in component:', crons);
 </script>
 
 <style scoped>

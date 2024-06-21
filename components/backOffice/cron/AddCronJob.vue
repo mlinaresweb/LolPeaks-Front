@@ -23,8 +23,12 @@
           <input type="text" id="scriptPath" v-model="newCron.scriptPath" required>
         </div>
         <div>
-          <label for="params">Params (JSON)</label>
-          <textarea id="params" v-model="newCron.params"></textarea>
+          <label for="region">Region (optional)</label>
+          <input type="text" id="region" v-model="newCron.region">
+        </div>
+        <div>
+          <label for="tier">Tier (optional)</label>
+          <input type="text" id="tier" v-model="newCron.tier">
         </div>
         <div>
           <label for="firstRun">First Run (optional)</label>
@@ -46,7 +50,8 @@
     intervalType: 'minutes',
     intervalValue: 1,
     scriptPath: '',
-    params: '',
+    region: '',
+    tier: '',
     firstRun: ''
   });
   

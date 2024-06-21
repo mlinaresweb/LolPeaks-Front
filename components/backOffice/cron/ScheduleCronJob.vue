@@ -11,8 +11,12 @@
           <input type="text" id="scheduleScriptPath" v-model="scheduleCron.scriptPath" required>
         </div>
         <div>
-          <label for="scheduleParams">Params (JSON)</label>
-          <textarea id="scheduleParams" v-model="scheduleCron.params"></textarea>
+          <label for="region">Region (optional)</label>
+          <input type="text" id="region" v-model="scheduleCron.region">
+        </div>
+        <div>
+          <label for="tier">Tier (optional)</label>
+          <input type="text" id="tier" v-model="scheduleCron.tier">
         </div>
         <div>
           <label for="executeAt">Execute At</label>
@@ -32,7 +36,8 @@
   const scheduleCron = reactive({
     name: '',
     scriptPath: '',
-    params: '',
+    region: '',
+    tier: '',
     executeAt: ''
   });
   
