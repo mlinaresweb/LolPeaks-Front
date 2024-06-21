@@ -6,6 +6,7 @@ export const useCronStore = defineStore('cronStore', {
       crons: [] as any[],
       loading: false,
       error: null as string | null,
+      editingCron: null as any | null,
     }),
     actions: {
         async fetchCrons() {
@@ -14,9 +15,9 @@ export const useCronStore = defineStore('cronStore', {
             this.error = null;
             try {
               const response = await axiosAdminInstance.get('/cron/list');
-              console.log('Fetched crons:', response.data); // Log the fetched crons to verify the data
+              console.log('Fetched crons:', response.data); 
               this.crons = response.data;
-              console.log('Updated crons state:', this.crons); // Log the updated state
+              console.log('Updated crons state:', this.crons); 
             } catch (err:any) {
               this.error = err.response ? err.response.data : err.message;
               console.error('Error fetching crons:', this.error);
@@ -28,7 +29,7 @@ export const useCronStore = defineStore('cronStore', {
       const { axiosAdminInstance } = useAxios();
       try {
         await axiosAdminInstance.post('/cron/execute', { name });
-        this.fetchCrons(); // Refresh the list after executing
+        this.fetchCrons(); 
       } catch (err:any) {
         this.error = err.response ? err.response.data : err.message;
         console.error('Error executing job now:', this.error);
@@ -38,7 +39,7 @@ export const useCronStore = defineStore('cronStore', {
       const { axiosAdminInstance } = useAxios();
       try {
         await axiosAdminInstance.post('/cron/pause', { name });
-        this.fetchCrons(); // Refresh the list after pausing
+        this.fetchCrons(); 
       } catch (err:any) {
         this.error = err.response ? err.response.data : err.message;
         console.error('Error pausing job:', this.error);
@@ -48,7 +49,7 @@ export const useCronStore = defineStore('cronStore', {
       const { axiosAdminInstance } = useAxios();
       try {
         await axiosAdminInstance.post('/cron/resume', { name });
-        this.fetchCrons(); // Refresh the list after resuming
+        this.fetchCrons();
       } catch (err:any) {
         this.error = err.response ? err.response.data : err.message;
         console.error('Error resuming job:', this.error);
@@ -58,15 +59,58 @@ export const useCronStore = defineStore('cronStore', {
       const { axiosAdminInstance } = useAxios();
       try {
         await axiosAdminInstance.delete(`/cron/remove/${name}`);
-        this.fetchCrons(); // Refresh the list after removing
+        this.fetchCrons(); 
       } catch (err:any) {
         this.error = err.response ? err.response.data : err.message;
         console.error('Error removing job:', this.error);
       }
     },
+    async addJob(jobDetails: any) {
+      const { axiosAdminInstance } = useAxios();
+      try {
+        await axiosAdminInstance.post('/cron/add', jobDetails);
+        this.fetchCrons(); 
+      } catch (err:any) {
+        this.error = err.response ? err.response.data : err.message;
+        console.error('Error adding job:', this.error);
+      }
+    },
+    async modifyJob(jobDetails: any) {
+      const { axiosAdminInstance } = useAxios();
+      try {
+        await axiosAdminInstance.post('/cron/modify', jobDetails);
+        this.fetchCrons(); 
+      } catch (err:any) {
+        this.error = err.response ? err.response.data : err.message;
+        console.error('Error modifying job:', this.error);
+      }
+    },
+    async scheduleJob(jobDetails: any) {
+      const { axiosAdminInstance } = useAxios();
+      try {
+        await axiosAdminInstance.post('/cron/schedule', jobDetails);
+        this.fetchCrons(); 
+      } catch (err:any) {
+        this.error = err.response ? err.response.data : err.message;
+        console.error('Error scheduling job:', this.error);
+      }
+    },
+    setEditingCron(cron: any) {
+      const intervalMatch = cron.interval.match(/(\d+)\s*(\w+)/);
+      const intervalValue = intervalMatch ? parseInt(intervalMatch[1], 10) : 1;
+      const intervalType = intervalMatch ? intervalMatch[2] : 'minutes';
+    
+      this.editingCron = {
+        ...cron,
+        intervalValue,
+        intervalType,
+        params: JSON.stringify(cron.params, null, 2)
+      };
+    }
+    
   },
   persist: import.meta.client ? {
-    key: 'adminAuth',
+    key: 'cronStore',
     storage: localStorage,
    
   } : undefined,
