@@ -40,6 +40,14 @@ export function useCrons() {
     cronStore.setEditingCron(cron);
   };
 
+  const formatDuration = (duration: number | undefined) => {
+    if (!duration) return 'N/A';
+    const hrs = Math.floor(duration / 3600).toString().padStart(2, '0');
+    const mins = Math.floor((duration % 3600) / 60).toString().padStart(2, '0');
+    const secs = (duration % 60).toString().padStart(2, '0');
+    return `${hrs}:${mins}:${secs}`;
+  };
+
   return {
     crons: computed(() => cronStore.crons),
     loading: computed(() => cronStore.loading),
@@ -54,5 +62,6 @@ export function useCrons() {
     modifyJob,
     scheduleJob,
     setEditingCron,
+    formatDuration,
   };
 }
