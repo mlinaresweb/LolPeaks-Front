@@ -31,9 +31,9 @@
             <td>{{ cron.region || 'N/A' }}</td>
             <td>{{ cron.tier || 'N/A' }}</td>
             <td>
-              <button @click="handleExecuteJobNow(cron.name, cron.scriptPath, cron.region, cron.tier)">Execute Now</button>
-              <button @click="pauseJob(cron.name)">Pause</button>
-              <button @click="resumeJob(cron.name)">Resume</button>
+              <button @click="togglePlayPause(cron.name)">
+              {{ cron.isRunning ? 'Pause' : 'Play' }}
+            </button>
               <button @click="removeJob(cron.name)">Remove</button>
               <button @click="openEditCronModal(cron)">Edit</button>
             </td>
@@ -82,15 +82,19 @@ const showAddCronModal = ref(false);
 const showEditCronModal = ref(false);
 const showScheduleCronModal = ref(false);
 
-const openEditCronModal = (cron) => {
+const openEditCronModal = (cron:any) => {
   setEditingCron(cron);
   showEditCronModal.value = true;
 };
 
-const handleExecuteJobNow = (name, scriptPath, region, tier) => {
-  executeJobNow(name, scriptPath, { region, tier });
+const togglePlayPause = async (name: string) => {
+  const cron = crons.value.find(c => c.name === name);
+  if (cron.isRunning) {
+    await pauseJob(name);
+  } else {
+    await resumeJob(name);
+  }
 };
-
 onMounted(() => {
   adminAuthStore.checkAuth();
   if (isAuthenticated.value) {

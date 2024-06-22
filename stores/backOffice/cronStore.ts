@@ -17,12 +17,24 @@ export const useCronStore = defineStore('cronStore', {
               const response = await axiosAdminInstance.get('/cron/list');
               console.log('Fetched crons:', response.data); 
               this.crons = response.data;
+              await this.updateCronsRunningStatus();
               console.log('Updated crons state:', this.crons); 
             } catch (err:any) {
               this.error = err.response ? err.response.data : err.message;
               console.error('Error fetching crons:', this.error);
             } finally {
               this.loading = false;
+            }
+          },
+          async updateCronsRunningStatus() {
+            const { axiosAdminInstance } = useAxios();
+            for (const cron of this.crons) {
+              try {
+                const response = await axiosAdminInstance.get(`/cron/is-running/${cron.name}`);
+                cron.isRunning = response.data.isRunning;
+              } catch (err: any) {
+                cron.isRunning = false;
+              }
             }
           },
           async executeJobNow(name: string, scriptPath: string, params: any) {
