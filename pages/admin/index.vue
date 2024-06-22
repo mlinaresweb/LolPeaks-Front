@@ -20,6 +20,9 @@
             <th>Script</th>
             <th>Region</th>
             <th>Tier</th>
+            <th>Execution Time</th> <!-- Nueva columna -->
+            <th>Last Duration</th> <!-- Nueva columna -->
+            <th>Time Until Next Run</th> <!-- Nueva columna -->
             <th>Actions</th>
           </tr>
         </thead>
@@ -30,10 +33,13 @@
             <td>{{ cron.scriptPath }}</td>
             <td>{{ cron.region || '' }}</td>
             <td>{{ cron.tier || '' }}</td>
+            <td>{{ cron.executionTime }}</td> <!-- Nueva columna -->
+            <td>{{ cron.lastDuration ? formatDuration(cron.lastDuration) : 'N/A' }}</td> <!-- Nueva columna -->
+            <td>{{ cron.timeUntilNextRun }}</td> <!-- Nueva columna -->
             <td>
               <button @click="togglePlayPause(cron.name)">
-              {{ cron.isRunning ? 'Pause' : 'Play' }}
-            </button>
+                {{ cron.isRunning ? 'Pause' : 'Play' }}
+              </button>
               <button @click="removeJob(cron.name)">Remove</button>
               <button @click="openEditCronModal(cron)">Edit</button>
             </td>
@@ -95,6 +101,15 @@ const togglePlayPause = async (name: string) => {
     await resumeJob(name);
   }
 };
+
+const formatDuration = (duration: number | undefined) => {
+  if (!duration) return 'N/A';
+  const hrs = Math.floor(duration / 3600).toString().padStart(2, '0');
+  const mins = Math.floor((duration % 3600) / 60).toString().padStart(2, '0');
+  const secs = (duration % 60).toString().padStart(2, '0');
+  return `${hrs}:${mins}:${secs}`;
+};
+
 onMounted(() => {
   adminAuthStore.checkAuth();
   if (isAuthenticated.value) {
