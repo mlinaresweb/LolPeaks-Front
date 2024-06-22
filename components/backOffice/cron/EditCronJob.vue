@@ -53,15 +53,16 @@
   }, { immediate: true });
   
   const modifyExistingCron = () => {
-    modifyJob({
-      name: editingCron.value.name,
-      newIntervalType: editingCron.value.intervalType,
-      newIntervalValue: editingCron.value.intervalValue,
-      newScriptPath: editingCron.value.scriptPath,
-      newRegion: editingCron.value.region,
-      newTier: editingCron.value.tier,
-      newFirstRun: editingCron.value.firstRun,
-    });
-  };
+  modifyJob({
+    name: editingCron.value.name,
+    newIntervalType: editingCron.value.intervalType,
+    newIntervalValue: editingCron.value.intervalValue,
+    newScriptPath: editingCron.value.scriptPath,
+    newRegion: editingCron.value.region || '',
+    newTier: editingCron.value.tier || '',
+    newFirstRun: editingCron.value.firstRun,
+  });
+};
+
   </script>
   

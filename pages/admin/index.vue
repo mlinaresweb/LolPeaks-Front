@@ -28,8 +28,8 @@
             <td>{{ cron.name }}</td>
             <td>{{ cron.interval }}</td>
             <td>{{ cron.scriptPath }}</td>
-            <td>{{ cron.region || 'N/A' }}</td>
-            <td>{{ cron.tier || 'N/A' }}</td>
+            <td>{{ cron.region || '' }}</td>
+            <td>{{ cron.tier || '' }}</td>
             <td>
               <button @click="togglePlayPause(cron.name)">
               {{ cron.isRunning ? 'Pause' : 'Play' }}
