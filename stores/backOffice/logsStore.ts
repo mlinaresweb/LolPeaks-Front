@@ -15,7 +15,7 @@ export const useLogStore = defineStore('logStore', {
       this.error = null;
       try {
         const response = await axiosAdminInstance.get('/logs/global');
-        this.globalLogs = response.data;
+        this.globalLogs = response.data.logs; // Ajuste aquí para acceder a la propiedad logs
       } catch (err: any) {
         this.error = err.response ? err.response.data : err.message;
       } finally {
@@ -28,7 +28,7 @@ export const useLogStore = defineStore('logStore', {
       this.error = null;
       try {
         const response = await axiosAdminInstance.get(`/logs/task/${taskName}`);
-        this.taskLogs = response.data;
+        this.taskLogs = response.data.logs; // Ajuste aquí para acceder a la propiedad logs
       } catch (err: any) {
         this.error = err.response ? err.response.data : err.message;
       } finally {
