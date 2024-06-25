@@ -1,5 +1,5 @@
 <template>
-  <div class="table-container">
+  <div class="table-container" ref="tableContainer">
     <table v-if="crons.length">
       <thead>
         <tr>
@@ -49,34 +49,42 @@
 
 
 
-  <script setup lang="ts">
-  defineProps({
-    crons: {
-      type: Array as PropType<any[]>,
-      required: true
-    },
-    togglePlayPause: {
-      type: Function as PropType<(name: string) => void>,
-      required: true
-    },
-    removeJob: {
-      type: Function as PropType<(name: string) => void>,
-      required: true
-    },
-    openEditCronModal: {
-      type: Function as PropType<(cron: any) => void>,
-      required: true
-    },
-  });
-  
-  const formatDuration = (duration: number | undefined) => {
-    if (!duration) return 'N/A';
-    const hrs = Math.floor(duration / 3600).toString().padStart(2, '0');
-    const mins = Math.floor((duration % 3600) / 60).toString().padStart(2, '0');
-    const secs = (duration % 60).toString().padStart(2, '0');
-    return `${hrs}:${mins}:${secs}`;
-  };
-  </script>
+<script setup lang="ts">
+import { useTableScroll } from '~/composables/useTableScroll';
+
+
+defineProps({
+  crons: {
+    type: Array as PropType<any[]>,
+    required: true
+  },
+  togglePlayPause: {
+    type: Function as PropType<(name: string) => void>,
+    required: true
+  },
+  removeJob: {
+    type: Function as PropType<(name: string) => void>,
+    required: true
+  },
+  openEditCronModal: {
+    type: Function as PropType<(cron: any) => void>,
+    required: true
+  },
+});
+
+const formatDuration = (duration: number | undefined) => {
+  if (!duration) return 'N/A';
+  const hrs = Math.floor(duration / 3600).toString().padStart(2, '0');
+  const mins = Math.floor((duration % 3600) / 60).toString().padStart(2, '0');
+  const secs = (duration % 60).toString().padStart(2, '0');
+  return `${hrs}:${mins}:${secs}`;
+};
+
+const { tableContainer } = useTableScroll();
+
+
+
+</script>
   
   <style scoped>
   .table-container {
@@ -87,7 +95,12 @@
     background-color: #292929; 
     padding: 10px;
     overflow-x: auto;
+    cursor: grab;
+
   }
+  .table-container:active {
+  cursor: grabbing;
+}
   .actions .icon {
     display: inline-block;
     width: 24px;
