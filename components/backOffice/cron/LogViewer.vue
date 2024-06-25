@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h1>{{ title }}</h1>
+      <h1 class="title-logs">{{ title }}</h1>
       <LogFilters :filters="filters" @filterChange="applyFilter" />
       <div v-if="loading">Loading...</div>
       <div v-else-if="error">{{ error }}</div>
@@ -9,7 +9,7 @@
   </template>
   
   <script setup lang="ts">
-  import { defineProps, ref, computed, onMounted } from 'vue';
+  import {  ref, computed, onMounted } from 'vue';
   import LogFilters from '~/components/backOffice/cron/LogFilters.vue';
   import { format, parseISO } from 'date-fns';
   
@@ -101,11 +101,15 @@
   });
   </script>
   
-  <style>
+  <style >
+  .title-logs {
+    color: #FDC33B;
+  }
+  
   pre {
     white-space: pre-wrap;
     word-wrap: break-word;
-    background: #1e1e1e;
+    background: #292929;
     color: #dcdcdc;
     padding: 10px;
     border-radius: 5px;
@@ -113,6 +117,25 @@
     max-height: 600px;
     overflow-y: auto;
     font-family: 'Courier New', Courier, monospace;
+  }
+  
+  pre::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  pre::-webkit-scrollbar-track {
+    background: #1e1e1e;
+    border-radius: 5px;
+  }
+  
+  pre::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+    border: 3px solid #1e1e1e;
+  }
+  
+  pre::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
   }
   
   .timestamp {

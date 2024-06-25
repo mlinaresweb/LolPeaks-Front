@@ -1,15 +1,10 @@
 <template>
     <div class="filters">
-      <label for="filter-text">Filter by text:</label>
       <input id="filter-text" v-model="filterText" @input="applyFilter" type="text" placeholder="Enter text to filter logs" />
-  
-      <label for="filter-type">Filter by type:</label>
       <select id="filter-type" v-model="filterType" @change="applyFilter">
         <option value="">All</option>
         <option v-for="filter in filters" :key="filter.value" :value="filter.value">{{ filter.text }}</option>
       </select>
-  
-      <label for="filter-date">Filter by date:</label>
       <input id="filter-date" v-model="filterDate" @input="applyFilter" type="date" />
     </div>
   </template>
@@ -41,15 +36,31 @@
     margin-bottom: 10px;
   }
   
-  .filters label {
-    font-weight: bold;
-  }
-  
   .filters input,
   .filters select {
     padding: 5px;
-    border: 1px solid #ddd;
+    border: 1px solid #555;
     border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .filters input::placeholder {
+    color: #888;
+  }
+  
+  .filters input[type="date"] {
+    color: #fff;
+    background-color: #333;
+  }
+  
+  .filters input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+  
+  .filters select {
+    color: #fff;
+    background-color: #333;
   }
   </style>
   

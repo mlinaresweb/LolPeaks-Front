@@ -14,10 +14,12 @@ import SidebarNav from '~/components/backOffice/generics/SidebarNav.vue'
 
 
 <style scoped>
+
 .admin-layout {
   display: flex;
   background-color: #1c1c1c;
   min-height: 100vh;
+  font-family:Arial, Helvetica, sans-serif;
 }
 
 
@@ -42,7 +44,7 @@ import SidebarNav from '~/components/backOffice/generics/SidebarNav.vue'
   }
   .main-content {
     margin-left: 0;
-    width: 100%; /* Ancho completo para pantallas pequeñas */
+    width: 100%; 
   }
 }
 </style>
