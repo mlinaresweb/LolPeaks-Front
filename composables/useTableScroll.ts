@@ -2,27 +2,30 @@ import { ref, onMounted, onUnmounted } from 'vue';
 
 export function useTableScroll() {
   const tableContainer = ref<HTMLElement | null>(null);
+  let isDragging = false;
+  let startX: number;
+  let scrollLeft: number;
 
-  const handleWheel = (event: WheelEvent) => {
-    if (tableContainer.value) {
-      const delta = Math.sign(event.deltaY) * 50; // Cambiar 50 a un número menor para un desplazamiento más suave
-      tableContainer.value.scrollLeft += delta;
-      event.preventDefault();
-    }
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   };
 
   const handleMouseDown = (event: MouseEvent) => {
     if (tableContainer.value) {
-      const startX = event.pageX - tableContainer.value.offsetLeft;
-      const scrollLeft = tableContainer.value.scrollLeft;
+      isDragging = true;
+      startX = event.pageX - tableContainer.value.offsetLeft;
+      scrollLeft = tableContainer.value.scrollLeft;
 
       const handleMouseMove = (moveEvent: MouseEvent) => {
-        const x = moveEvent.pageX - tableContainer.value!.offsetLeft;
-        const walk = (x - startX) * 2; // Cambiar 2 a un número menor para un desplazamiento más suave
-        tableContainer.value!.scrollLeft = scrollLeft - walk;
+        if (isDragging) {
+          const x = moveEvent.pageX - tableContainer.value!.offsetLeft;
+          const walk = (x - startX) * 1.5; // Desplazamiento más suave
+          tableContainer.value!.scrollLeft = scrollLeft - walk;
+        }
       };
 
       const handleMouseUp = () => {
+        isDragging = false;
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
       };
@@ -33,15 +36,13 @@ export function useTableScroll() {
   };
 
   onMounted(() => {
-    if (tableContainer.value) {
-      tableContainer.value.addEventListener('wheel', handleWheel);
+    if (!isMobile() && tableContainer.value) {
       tableContainer.value.addEventListener('mousedown', handleMouseDown);
     }
   });
 
   onUnmounted(() => {
-    if (tableContainer.value) {
-      tableContainer.value.removeEventListener('wheel', handleWheel);
+    if (!isMobile() && tableContainer.value) {
       tableContainer.value.removeEventListener('mousedown', handleMouseDown);
     }
   });

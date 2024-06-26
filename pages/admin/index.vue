@@ -9,12 +9,11 @@
       <div v-if="loading">Loading...</div>
       <div v-if="error">{{ error }}</div>
 
-      <button @click="showAddCronModal = true">Add Cron Job</button>
-      <button @click="showScheduleCronModal = true">Schedule Cron Job</button>
+      <button class="add-cron-button" @click="showAddCronModal = true">Add Cron Job</button>
 
       <CronTableFilters
         :crons="crons"
-        @FilterChange="handleFilterChange"
+        @filterChange="handleFilterChange"
       />
 
       <CronTable
@@ -38,10 +37,6 @@
       <Modal v-if="showEditCronModal" @close="showEditCronModal = false">
         <EditCronJob @close="showEditCronModal = false" />
       </Modal>
-
-      <Modal v-if="showScheduleCronModal" @close="showScheduleCronModal = false">
-        <ScheduleCronJob @close="showScheduleCronModal = false" />
-      </Modal>
     </div>
   </div>
 </template>
@@ -54,7 +49,6 @@ import { useAdminAuthStore } from '~/stores/backOffice/adminAuth';
 import { useCrons } from '~/composables/backOffice/useCrons';
 import AddCronJob from '~/components/backOffice/cron/AddCronJob.vue';
 import EditCronJob from '~/components/backOffice/cron/EditCronJob.vue';
-import ScheduleCronJob from '~/components/backOffice/cron/ScheduleCronJob.vue';
 import Modal from '~/components/backOffice/generics/Modal.vue';
 import CronTable from '~/components/backOffice/cron/CronTable.vue';
 import CronTablePagination from '~/components/backOffice/cron/CronTablePagination.vue';
@@ -72,27 +66,55 @@ const { crons, loading, error, fetchCrons, executeJobNow, pauseJob, resumeJob, r
 
 const showAddCronModal = ref(false);
 const showEditCronModal = ref(false);
-const showScheduleCronModal = ref(false);
 
 const filters = ref({
   searchQuery: '',
-  selectedInterval: '',
-  selectedScript: '',
-  selectedLastDuration: ''
+  selectedIntervalOrder: '',
+  selectedDurationOrder: '',
+  selectedScript: ''
 });
 
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 
 const filteredCrons = computed(() => {
-  return crons.value.filter(cron => {
-    return (
-      (filters.value.searchQuery ? cron.name.includes(filters.value.searchQuery) : true) &&
-      (filters.value.selectedInterval ? cron.interval === filters.value.selectedInterval : true) &&
-      (filters.value.selectedScript ? cron.scriptPath === filters.value.selectedScript : true) &&
-      (filters.value.selectedLastDuration ? cron.lastDuration === parseInt(filters.value.selectedLastDuration) : true)
+  let result = [...crons.value];
+
+  if (filters.value.searchQuery) {
+    result = result.filter(cron =>
+      cron.name.toLowerCase().includes(filters.value.searchQuery.toLowerCase())
     );
-  });
+  }
+
+  if (filters.value.selectedScript) {
+    result = result.filter(cron => cron.scriptPath === filters.value.selectedScript);
+  }
+
+  if (filters.value.selectedIntervalOrder) {
+    result.sort((a, b) => {
+      const intervalA = parseInt(a.interval, 10);
+      const intervalB = parseInt(b.interval, 10);
+      if (filters.value.selectedIntervalOrder === 'asc') {
+        return intervalA - intervalB;
+      } else {
+        return intervalB - intervalA;
+      }
+    });
+  }
+
+  if (filters.value.selectedDurationOrder) {
+    result.sort((a, b) => {
+      const durationA = a.lastDuration || 0;
+      const durationB = b.lastDuration || 0;
+      if (filters.value.selectedDurationOrder === 'asc') {
+        return durationA - durationB;
+      } else {
+        return durationB - durationA;
+      }
+    });
+  }
+
+  return result;
 });
 
 const paginatedCrons = computed(() => {
@@ -103,7 +125,7 @@ const paginatedCrons = computed(() => {
 
 const handleFilterChange = (newFilters: any) => {
   filters.value = newFilters;
-  currentPage.value = 1; 
+  currentPage.value = 1;
 };
 
 const handlePageChange = (page: number) => {
@@ -135,5 +157,18 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Estilos para la página de administración */
+.add-cron-button {
+  background-color: #FDBE3B; 
+  color: #000; 
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.add-cron-button:hover {
+  background-color: #e0a828; 
+}
 </style>

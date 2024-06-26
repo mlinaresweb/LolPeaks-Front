@@ -28,11 +28,6 @@ import SidebarNav from '~/components/backOffice/generics/SidebarNav.vue'
     margin-right: 40px;
     width: calc(100% - 330px);
 }
-
-
-
-
-
 @media (max-width: 992px) {
   .admin-layout {
     flex-direction: column;

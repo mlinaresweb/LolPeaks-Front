@@ -96,7 +96,7 @@ const { tableContainer } = useTableScroll();
     padding: 10px;
     overflow-x: auto;
     cursor: grab;
-
+    -webkit-overflow-scrolling: touch; 
   }
   .table-container:active {
   cursor: grabbing;
