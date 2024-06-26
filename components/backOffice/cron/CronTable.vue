@@ -93,7 +93,6 @@ const { tableContainer } = useTableScroll();
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     background-color: #292929; 
-    padding: 10px;
     overflow-x: auto;
     cursor: grab;
     -webkit-overflow-scrolling: touch; 

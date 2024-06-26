@@ -44,7 +44,7 @@
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  padding-top: 40px;
+  padding-top: 20px;
 }
 
 .sidebar nav ul {
