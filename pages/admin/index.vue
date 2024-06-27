@@ -1,10 +1,8 @@
 <template>
   <div>
     <h1>Admin Page</h1>
-    <p v-if="isAuthenticated">Bienvenido, Admin.</p>
-    <p v-else>No tienes acceso a esta página.</p>
-
-    <div v-if="isAuthenticated">
+    <p >Bienvenido, Admin.</p>
+    <div >
       <h2>Cron Jobs</h2>
       <div v-if="loading">Loading...</div>
       <div v-if="error">{{ error }}</div>
@@ -45,22 +43,20 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import CronTableFilters from '~/components/backOffice/cron/cronTableFilters.vue';
-import { useAdminAuthStore } from '~/stores/backOffice/adminAuth';
 import { useCrons } from '~/composables/backOffice/useCrons';
 import AddCronJob from '~/components/backOffice/cron/AddCronJob.vue';
 import EditCronJob from '~/components/backOffice/cron/EditCronJob.vue';
 import Modal from '~/components/backOffice/generics/Modal.vue';
 import CronTable from '~/components/backOffice/cron/CronTable.vue';
 import CronTablePagination from '~/components/backOffice/cron/CronTablePagination.vue';
-
+// Aplicar el middleware de autenticación
 definePageMeta({
-  layout: 'admin'
-});
+  layout: 'admin',
+  middleware: 'admin-auth',
 
-const adminAuthStore = useAdminAuthStore();
+});
 const router = useRouter();
 
-const isAuthenticated = computed(() => adminAuthStore.isAuthenticated);
 
 const { crons, loading, error, fetchCrons, executeJobNow, pauseJob, resumeJob, removeJob, setEditingCron } = useCrons();
 
@@ -147,13 +143,11 @@ const togglePlayPause = async (name: string) => {
 };
 
 onMounted(() => {
-  adminAuthStore.checkAuth();
-  if (isAuthenticated.value) {
+ 
     fetchCrons();
-  } else {
-    router.push('/admin/login');
-  }
+  
 });
+
 </script>
 
 <style scoped>

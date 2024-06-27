@@ -3,17 +3,15 @@
     <SidebarNav v-if="!isMobile" />
     <MobileNav v-else />
     <div class="main-content">
-     
       <slot></slot>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
-
-import SidebarNav from '~/components/backOffice/generics/SidebarNav.vue'
-import MobileNav from '~/components/backOffice/generics/MobileNav.vue'
+import SidebarNav from '~/components/backOffice/generics/SidebarNav.vue';
+import MobileNav from '~/components/backOffice/generics/MobileNav.vue';
 
 const isMobile = ref(false);
 
@@ -25,23 +23,21 @@ onMounted(() => {
   handleResize();
   window.addEventListener('resize', handleResize);
 });
+
 </script>
 
-
 <style scoped>
-
 .admin-layout {
   background-color: #1c1c1c;
   min-height: 100vh;
   display: flex;
-  font-family:Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
-
 
 .main-content {
   margin-left: 290px;
-    margin-right: 40px;
-    width: calc(100% - 330px);
+  margin-right: 40px;
+  width: calc(100% - 330px);
 }
 
 @media (max-width: 992px) {
@@ -50,9 +46,7 @@ onMounted(() => {
     width: 100%; 
   }
   .admin-layout {
-  display: block;
-  
-}
-
+    display: block;
+  }
 }
 </style>

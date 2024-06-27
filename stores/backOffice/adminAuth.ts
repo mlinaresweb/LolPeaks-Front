@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { useAxios } from '~/composables/useAxios';
 import Cookies from 'js-cookie';
+import { useRouter } from 'vue-router';
+import { addLayout } from 'nuxt/kit';
 
 export const useAdminAuthStore = defineStore('adminAuth', {
   state: () => ({
@@ -12,24 +14,19 @@ export const useAdminAuthStore = defineStore('adminAuth', {
       const { axiosAdminInstance } = useAxios();
       try {
         const response = await axiosAdminInstance.post('/auth/login', { username, password });
-        console.log('Login response:', response); // Log de la respuesta
-
         if (response.status === 200 && response.data.token) {
           this.token = response.data.token;
           this.isAuthenticated = true;
-          console.log('Token received:', this.token); // Log del token recibido
 
           if (this.token) {
             Cookies.set('auth_token', this.token, { expires: 7, secure: true });
-            console.log('Token set in cookies'); // Log cuando se guarda la cookie
+            console.log('Token set in cookies:', this.token);
           }
         } else {
-          console.error('Login failed: No token received', response.data); // Log de error detallado
           this.isAuthenticated = false;
           this.token = null;
         }
       } catch (error) {
-        console.error('Error logging in:', error);
         this.isAuthenticated = false;
         this.token = null;
       }
@@ -42,14 +39,13 @@ export const useAdminAuthStore = defineStore('adminAuth', {
           this.isAuthenticated = false;
           this.token = null;
           Cookies.remove('auth_token');
-        } else {
-          console.error('Logout failed:', response.data.message || 'Unknown error'); // Log de error detallado
         }
       } catch (error) {
         console.error('Error logging out:', error);
       }
     },
     checkAuth() {
+
       const token = Cookies.get('auth_token');
       console.log('Token from cookies:', token); // Log del token obtenido de las cookies
       this.isAuthenticated = !!token;
@@ -59,10 +55,18 @@ export const useAdminAuthStore = defineStore('adminAuth', {
         this.token = null;
       }
     },
+    redirectToLogin(reload = false) {
+      if (reload) {
+        window.location.href = '/admin/login';
+      } else {
+        const router = useRouter();
+        router.replace('/admin/login');
+      }
+    }
   },
-  persist: import.meta.client ? {
+  persist: typeof window !== 'undefined' ? {
     key: 'adminAuth',
-    storage: localStorage,
+    storage: window.localStorage,
     paths: ['isAuthenticated', 'token'],
   } : undefined,
 });

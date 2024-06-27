@@ -31,5 +31,9 @@
       router.push('/admin');
     }
   };
+  definePageMeta({
+  layout: 'login',
+
+});
   </script>
   

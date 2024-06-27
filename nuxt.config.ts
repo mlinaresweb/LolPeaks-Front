@@ -4,5 +4,9 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
   ],
+  plugins: [
+    '~/plugins/pinia.ts',
+  ],
   components: true,
+  
 })
