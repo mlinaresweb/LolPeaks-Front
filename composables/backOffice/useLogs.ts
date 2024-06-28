@@ -4,12 +4,14 @@ import { computed } from 'vue';
 export function useLogs() {
   const logStore = useLogStore();
 
-  const fetchGlobalLogs = async () => {
-    await logStore.fetchGlobalLogs();
+  const fetchGlobalLogs = async (date?: string) => {
+    await logStore.fetchGlobalLogs(date);
   };
 
-  const fetchTaskLogs = async (taskName: string) => {
-    await logStore.fetchTaskLogs(taskName);
+  const fetchTaskLogs = async (taskName: string, date?: string) => {
+    // console.log(`Fetching logs for task ${taskName} with date ${date}`); // Debugging line
+    await logStore.fetchTaskLogs(taskName, date);
+    // console.log('Fetched task logs:', logStore.taskLogs); // Debugging line
   };
 
   return {

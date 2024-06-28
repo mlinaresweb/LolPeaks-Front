@@ -9,26 +9,32 @@ export const useLogStore = defineStore('logStore', {
     error: null as string | null,
   }),
   actions: {
-    async fetchGlobalLogs() {
+    async fetchGlobalLogs(date?: string) {
       const { axiosAdminInstance } = useAxios();
       this.loading = true;
       this.error = null;
       try {
-        const response = await axiosAdminInstance.get('/logs/global');
-        this.globalLogs = response.data.logs; 
+        const response = await axiosAdminInstance.get('/logs/global', {
+          params: { date },
+        });
+        this.globalLogs = response.data.logs;
+        // console.log('Fetched global logs:', this.globalLogs); // Debugging line
       } catch (err: any) {
         this.error = err.response ? err.response.data : err.message;
       } finally {
         this.loading = false;
       }
     },
-    async fetchTaskLogs(taskName: string) {
+    async fetchTaskLogs(taskName: string, date?: string) {
       const { axiosAdminInstance } = useAxios();
       this.loading = true;
       this.error = null;
       try {
-        const response = await axiosAdminInstance.get(`/logs/task/${taskName}`);
-        this.taskLogs = response.data.logs; 
+        const response = await axiosAdminInstance.get(`/logs/task/${taskName}`, {
+          params: { date },
+        });
+        this.taskLogs = response.data.logs;
+        // console.log('Fetched task logs:', this.taskLogs); // Debugging line
       } catch (err: any) {
         this.error = err.response ? err.response.data : err.message;
       } finally {
@@ -41,3 +47,4 @@ export const useLogStore = defineStore('logStore', {
     storage: localStorage,
   } : undefined,
 });
+
