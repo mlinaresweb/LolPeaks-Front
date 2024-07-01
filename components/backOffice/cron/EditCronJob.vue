@@ -4,7 +4,7 @@
     <form @submit.prevent="modifyExistingCron">
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" id="name" v-model="editingCron.name" required disabled>
+        <input type="text" id="name" v-model="editingCron.name" required >
       </div>
       <div class="form-group">
         <label for="intervalType">Interval Type</label>
@@ -42,7 +42,8 @@
   <script setup lang="ts">
   import { watch } from 'vue';
   import { useCrons } from '~/composables/backOffice/useCrons';
-  
+
+  const emit = defineEmits(['close']);
   const { editingCron, modifyJob } = useCrons();
   
   watch(() => editingCron.value, (newVal) => {
@@ -62,6 +63,7 @@
     newTier: editingCron.value.tier || '',
     newFirstRun: editingCron.value.firstRun,
   });
+  emit('close');
 };
 
   </script>

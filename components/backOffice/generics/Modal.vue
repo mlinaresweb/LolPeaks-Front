@@ -8,8 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from 'vue';
-
 const emit = defineEmits(['close']);
 
 const closeModal = () => {
@@ -30,6 +28,8 @@ const closeModal = () => {
   align-items: center;
   backdrop-filter: blur(5px);
   animation: fadeIn 0.3s ease;
+  padding: 20px;
+  z-index: 100;
 }
 
 .modal-content {
@@ -40,8 +40,31 @@ const closeModal = () => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   max-width: 500px;
   width: 90%;
+  max-height: 90vh; 
+  overflow-y: auto; 
+  margin: 10px 0; 
   color: #f5f5f5;
   animation: slideIn 0.3s ease;
+}
+
+/* Estilos para la barra de scroll */
+.modal-content::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #333; 
+  border-radius: 10px; 
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background-color: #888; 
+  border-radius: 10px; 
+  border: 3px solid #333; 
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background-color: #555; 
 }
 
 .close-button {

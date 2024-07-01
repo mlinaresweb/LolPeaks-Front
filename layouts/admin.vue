@@ -10,13 +10,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import SidebarNav from '~/components/backOffice/generics/SidebarNav.vue';
-import MobileNav from '~/components/backOffice/generics/MobileNav.vue';
+import SidebarNav from '~/components/backOffice/nav/SidebarNav.vue';
+import MobileNav from '~/components/backOffice/nav/MobileNav.vue';
 
 const isMobile = ref(false);
 
 const handleResize = () => {
-  isMobile.value = window.innerWidth <= 992; // Ajusta el valor según tus necesidades
+  isMobile.value = window.innerWidth <= 992; 
 };
 
 onMounted(() => {
@@ -43,7 +43,9 @@ onMounted(() => {
 @media (max-width: 992px) {
   .main-content {
     margin-left: 0;
-    width: 100%; 
+    padding: 20px;
+    margin-right: 0;
+    width: calc(100% - 40px);
   }
   .admin-layout {
     display: block;

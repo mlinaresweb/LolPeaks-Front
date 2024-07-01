@@ -43,6 +43,7 @@
 import { reactive } from 'vue';
 import { useCrons } from '~/composables/backOffice/useCrons';
 
+const emit = defineEmits(['close']);
 const { addJob } = useCrons();
 
 const newCron = reactive({
@@ -57,6 +58,7 @@ const newCron = reactive({
 
 const addNewCron = () => {
   addJob(newCron);
+  emit('close');
 };
 </script>
 
